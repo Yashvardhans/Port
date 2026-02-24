@@ -8,6 +8,7 @@ from sqlalchemy.orm import Session
 
 from database.database import SessionLocal, engine
 from models.models import Base, Resume
+from resume_data import RESUME_DATA
 
 load_dotenv()
 
@@ -36,16 +37,31 @@ def get_db():
     finally:
         db.close()
 
-# ---------- Request Models ----------
+# ---------- AUTO INSERT RESUME ON STARTUP ----------
+
+def insert_resume_if_empty(db: Session):
+    existing = db.query(Resume).first()
+
+    if not existing:
+        new_resume = Resume(
+            name=RESUME_DATA["name"],
+            role=RESUME_DATA["role"],
+            location=RESUME_DATA["location"],
+            full_text=RESUME_DATA["full_text"],
+        )
+        db.add(new_resume)
+        db.commit()
+
+@app.on_event("startup")
+def startup_event():
+    db = SessionLocal()
+    insert_resume_if_empty(db)
+    db.close()
+
+# ---------- Request Model ----------
 
 class ChatRequest(BaseModel):
     message: str
-
-class ResumeCreate(BaseModel):
-    name: str
-    role: str
-    location: str
-    full_text: str
 
 # ---------- Routes ----------
 
@@ -53,29 +69,7 @@ class ResumeCreate(BaseModel):
 async def root():
     return {"message": "Backend running 🚀"}
 
-
-
-@app.post("/resume")
-def add_resume(resume: ResumeCreate, db: Session = Depends(get_db)):
-
-    # Delete old resume so only one exists
-    db.query(Resume).delete()
-    db.commit()
-
-    new_resume = Resume(
-        name=resume.name,
-        role=resume.role,
-        location=resume.location,
-        full_text=resume.full_text,
-    )
-
-    db.add(new_resume)
-    db.commit()
-    db.refresh(new_resume)
-
-    return {"message": "Resume saved successfully"}
-
-
+# ⭐ CHATBOT ROUTE
 
 @app.post("/chat")
 async def chat(req: ChatRequest, db: Session = Depends(get_db)):
