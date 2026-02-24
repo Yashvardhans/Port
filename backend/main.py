@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from database.database import SessionLocal, engine
 from models.models import Base, Resume
-from resume_data import RESUME_DATA
+from utils.resume_data import RESUME_DATA
 
 load_dotenv()
 
