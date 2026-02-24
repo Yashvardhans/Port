@@ -1,30 +1,49 @@
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from pydantic import BaseModel
 import requests
 import os
 from dotenv import load_dotenv
+from sqlalchemy.orm import Session
 
-from database.database import SessionLocal
-from models.models import Resume
-from utils.rag import retrieve
+from database.database import SessionLocal, engine
+from models.models import Base, Resume
 
 load_dotenv()
 
+# Create tables if they don't exist
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
+
+# ---------- Database Dependency ----------
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+# ---------- Request Model ----------
 
 class ChatRequest(BaseModel):
     message: str
 
+
+# ---------- Routes ----------
 
 @app.get("/")
 async def root():
@@ -32,10 +51,22 @@ async def root():
 
 
 @app.post("/chat")
-async def chat(req: ChatRequest):
+async def chat(req: ChatRequest, db: Session = Depends(get_db)):
 
-    relevant_docs = retrieve(req.message)
-    context = "\n".join(relevant_docs)
+    # Fetch first resume entry
+    resume = db.query(Resume).first()
+
+    if resume:
+        context = f"""
+Name: {resume.name}
+Role: {resume.role}
+Skills: {resume.skills}
+Education: {resume.education}
+Projects: {resume.projects}
+Location: {resume.location}
+"""
+    else:
+        context = "No resume data available."
 
     prompt = f"""
 You are an AI assistant for Yashvardhan Singh Bhadoria's portfolio website.
@@ -77,9 +108,7 @@ Answer:
         },
         json={
             "model": "arcee-ai/trinity-large-preview:free",
-            "messages": [
-                {"role": "user", "content": prompt}
-            ],
+            "messages": [{"role": "user", "content": prompt}],
         },
     )
 
