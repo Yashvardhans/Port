@@ -1,0 +1,122 @@
+/* =========================
+   SKILLS SECTION
+========================= */
+
+.skills-section {
+  height: 100vh;
+  padding: 70px 80px;
+  color: #fff;
+}
+
+/* TITLE */
+.skills-title {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 50px;
+}
+
+/* =========================
+   LAYOUT
+========================= */
+
+.skills-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+/* =========================
+   SKILL GROUP (BORDERED BOX)
+========================= */
+
+.skill-section {
+  padding: 26px 24px;
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(6px);
+}
+
+/* GROUP TITLE */
+.skill-section h3 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 22px;
+  opacity: 0.95;
+}
+
+/* =========================
+   SKILL GRID
+========================= */
+
+.skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 16px;
+}
+
+/* =========================
+   SKILL CARD
+========================= */
+
+.skill-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 14px;
+  border-radius: 14px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  transition: transform 0.25s ease, 
+              background 0.25s ease, 
+              border-color 0.25s ease;
+}
+
+/* ICON */
+.skill-card i {
+  font-size: 22px;
+  color: #ffffff;
+}
+
+/* TEXT */
+.skill-card span {
+  font-size: 13px;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+/* HOVER */
+.skill-card:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(237, 65, 199, 0.6);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1024px) {
+  .skills-wrapper {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skills-section {
+    padding: 50px 24px;
+  }
+
+  .skills-title {
+    font-size: 28px;
+    margin-bottom: 36px;
+  }
+
+  .skill-section {
+    padding: 22px 20px;
+  }
+}

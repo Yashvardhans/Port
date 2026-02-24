@@ -1,0 +1,124 @@
+.banner_container {
+  color: #fff;
+  padding: 100px 50px;
+  height: 100vh;
+}
+/* radial-gradient(70.4% 50% at 56.7% 111.3%, rgb(242, 131, 5) 0%, rgb(245, 59, 7) 100%) */
+
+.banner_p {
+  color: #fff;
+  font-size: 20px;
+  line-height: 26px;
+  font-family: "Poppins";
+  margin: 20px 0;
+}
+
+.banner_heading {
+  color: #fff;
+  font-size: 64px;
+  line-height: 70px;
+  font-family: "Poppins";
+  font-weight: 700;
+  margin:30px 0 30px 0;
+}
+.banner_heading div{
+  margin: 35px 0;
+  font-size: 48px;
+}
+
+.banner_button {
+  border-radius: 10px;
+  background: #6e07f3;
+  padding: 20px 80px;
+  margin: 70px 0 0 0 ;
+  transition: 0.3s;
+  color: #fff;
+}
+
+.banner_button:hover {
+  background: #fff;
+  color: #ed41c7;
+}
+
+.banner_button a {
+  width: 100%;
+  font-size: 24px;
+  line-height: 30px;
+  font-family: "Quicksand";
+  font-weight: 600;
+}
+
+@media only screen and (max-width: 1200px) {
+  .banner_heading {
+    font-size: 52px;
+    line-height: 58px;
+  }
+}
+@media only screen and (max-width: 992px) {
+  .banner_heading {
+    font-size: 46px;
+    line-height: 52px;
+  }
+
+  .banner_container {
+    padding: 80px 20px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .banner_heading {
+    font-size: 32px;
+    line-height: 38px;
+    margin-bottom: 16px;
+  }
+
+  .banner_container {
+    height: auto;
+    padding: 80px 10px;
+  }
+
+  .banner_button {
+    padding: 18px 60px;
+    margin-top: 20px;
+  }
+
+  .banner_button a {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 600;
+  }
+}
+
+@media only screen and (max-width: 576px) {
+  .banner_heading {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .banner_p {
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  .banner_container {
+    padding: 60px 4px;
+  }
+
+  .banner_button {
+    padding: 10px 40px;
+    margin-top: 6px;
+  }
+
+  .banner_button a {
+    font-size: 16px;
+    line-height: 22px;
+  }
+}
+.glow {
+  color: #ffffff;
+
+  text-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.4),
+    0 0 10px rgba(108, 99, 255, 0.28),
+    0 0 22px rgba(255, 138, 0, 0.12);
+}
+
