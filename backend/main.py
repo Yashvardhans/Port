@@ -11,11 +11,12 @@ from models.models import Base, Resume
 
 load_dotenv()
 
-# Create tables if they don't exist
+# Create tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+# Allow frontend requests
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -26,7 +27,6 @@ app.add_middleware(
 
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 
-
 # ---------- Database Dependency ----------
 
 def get_db():
@@ -36,12 +36,16 @@ def get_db():
     finally:
         db.close()
 
-
-# ---------- Request Model ----------
+# ---------- Request Models ----------
 
 class ChatRequest(BaseModel):
     message: str
 
+class ResumeCreate(BaseModel):
+    name: str
+    role: str
+    location: str
+    full_text: str
 
 # ---------- Routes ----------
 
@@ -50,20 +54,42 @@ async def root():
     return {"message": "Backend running 🚀"}
 
 
+
+@app.post("/resume")
+def add_resume(resume: ResumeCreate, db: Session = Depends(get_db)):
+
+    # Delete old resume so only one exists
+    db.query(Resume).delete()
+    db.commit()
+
+    new_resume = Resume(
+        name=resume.name,
+        role=resume.role,
+        location=resume.location,
+        full_text=resume.full_text,
+    )
+
+    db.add(new_resume)
+    db.commit()
+    db.refresh(new_resume)
+
+    return {"message": "Resume saved successfully"}
+
+
+
 @app.post("/chat")
 async def chat(req: ChatRequest, db: Session = Depends(get_db)):
 
-    # Fetch first resume entry
     resume = db.query(Resume).first()
 
     if resume:
         context = f"""
 Name: {resume.name}
 Role: {resume.role}
-Skills: {resume.skills}
-Education: {resume.education}
-Projects: {resume.projects}
 Location: {resume.location}
+
+Resume Information:
+{resume.full_text}
 """
     else:
         context = "No resume data available."

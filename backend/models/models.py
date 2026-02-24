@@ -7,7 +7,5 @@ class Resume(Base):
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String)
     role = Column(String)
-    skills = Column(Text)
-    education = Column(Text)
-    projects = Column(Text)
     location = Column(String)
+    full_text = Column(Text)  

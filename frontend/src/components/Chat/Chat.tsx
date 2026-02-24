@@ -20,7 +20,7 @@ function ChatWidget() {
     setLoading(true);
 
     try {
-      const res = await fetch("https://minimal-doe-composed-trek.trycloudflare.com", {
+      const res = await fetch("https://portfolio-v1x8.onrender.com/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: userMsg }),
